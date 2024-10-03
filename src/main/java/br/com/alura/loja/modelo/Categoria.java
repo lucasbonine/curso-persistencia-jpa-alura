@@ -1,6 +1,4 @@
-package br.com.alura.loja;
-
-import java.math.BigDecimal;
+package br.com.alura.loja.modelo;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,16 +7,17 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "produtos")
-public class Produto {
-	
+@Table(name = "categorias")
+public class Categoria {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String nome;
-	private String descricao;
-	private BigDecimal preco;
 	
+	public Categoria(String nome) {
+		super();
+		this.nome = nome;
+	}
 	public Long getId() {
 		return id;
 	}
@@ -30,18 +29,6 @@ public class Produto {
 	}
 	public void setNome(String nome) {
 		this.nome = nome;
-	}
-	public String getDescricao() {
-		return descricao;
-	}
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
-	}
-	public BigDecimal getPreco() {
-		return preco;
-	}
-	public void setPreco(BigDecimal preco) {
-		this.preco = preco;
 	}
 
 }

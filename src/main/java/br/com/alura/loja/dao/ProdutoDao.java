@@ -2,7 +2,7 @@ package br.com.alura.loja.dao;
 
 import javax.persistence.EntityManager;
 
-import br.com.alura.loja.Produto;
+import br.com.alura.loja.modelo.Produto;
 
 public class ProdutoDao {
 	
@@ -13,7 +13,7 @@ public class ProdutoDao {
 	}
 	
 	public void cadastrar(Produto produto) {
-		this.em.persist(produto);
+		em.persist(produto);
 	}
 
 }
