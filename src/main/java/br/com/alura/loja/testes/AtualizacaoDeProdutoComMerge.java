@@ -4,10 +4,7 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 
 import javax.persistence.EntityManager;
-import javax.persistence.FlushModeType;
-
 import org.h2.tools.Server;
-import org.hibernate.FlushMode;
 
 import br.com.alura.loja.dao.CategoriaDao;
 import br.com.alura.loja.dao.ProdutoDao;
@@ -39,30 +36,30 @@ public class AtualizacaoDeProdutoComMerge {
         CategoriaDao categoriaDao = new CategoriaDao(em);        
         ProdutoDao produtoDao = new ProdutoDao(em);
         
-        em.getTransaction().begin();
+        em.getTransaction().begin(); //inicia transação
         
         categoriaDao.cadastrar(categoriaNotebook);
-        produtoDao.cadastrar(produtoNotebook);
+        produtoDao.cadastrar(produtoNotebook); //persist
         
-        //-------------- AQUI categoriaNotebook e categoriaNotebook ESTÃO EM MODO "MANAGED" POIS CHAMOU "persist" ----------
+        //-------------- MANAGED ----------
         
-        em.getTransaction().commit(); //alteração no banco
+        em.getTransaction().commit(); //fecha transação
         
-        //-------------- AQUI ESTÁ EM MODO DETACHED pois chamou "commit" ----------
+        //-------------- DETACHED  ----------
                 
         produtoNotebook.setDescricao("descricao alterada");
         
-        em.getTransaction().begin();
+        em.getTransaction().begin(); //inicia transação
         
-        produtoDao.atualizar(produtoNotebook); //<<<<----------- atualização do produtoNotebook com "merge"
+        produtoDao.atualizar(produtoNotebook); //merge
         
-      //-------------- AQUI ESTÁ EM MODO MANAGED POIS CHAMOU "merge" ----------
+       //-------------- MANAGED ----------
         
        imprimirProdutos(produtoDao);
        
-       em.getTransaction().commit();
+       em.getTransaction().commit(); //fecha transação
        
-       Thread.sleep(999999); //para poder debugar
+       Thread.sleep(999999);
 
 	}
 	
