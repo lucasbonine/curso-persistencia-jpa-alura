@@ -36,31 +36,49 @@ public class AtualizacaoDeProdutoComMerge {
         CategoriaDao categoriaDao = new CategoriaDao(em);        
         ProdutoDao produtoDao = new ProdutoDao(em);
         
-        em.getTransaction().begin(); //inicia transação
+        //------ Início transação -----
+        em.getTransaction().begin();
         
-        categoriaDao.cadastrar(categoriaNotebook);
+        categoriaDao.cadastrar(categoriaNotebook); //persist
         produtoDao.cadastrar(produtoNotebook); //persist
+        //categoriaNotebook e produtoNotebook 
+        //estão no estado managed
         
-        //-------------- MANAGED ----------
+        em.getTransaction().commit();
+        //---------- Fim transação ---------
         
-        em.getTransaction().commit(); //fecha transação
-        
-        //-------------- DETACHED  ----------
-                
+        verificarEstadoObjetos(em, categoriaNotebook, produtoNotebook);
         produtoNotebook.setDescricao("descricao alterada");
         
-        em.getTransaction().begin(); //inicia transação
+        //------ Início transação -----
+        em.getTransaction().begin();
+        em.clear();//apaga a alteração realizada enquanto produtoNotebook estava detached
         
-        produtoDao.atualizar(produtoNotebook); //merge
+        verificarEstadoObjetos(em, categoriaNotebook, produtoNotebook);
         
-       //-------------- MANAGED ----------
-        
-       imprimirProdutos(produtoDao);
-       
-       em.getTransaction().commit(); //fecha transação
-       
-       Thread.sleep(999999);
+        imprimirProdutos(produtoDao);
 
+        em.getTransaction().commit();
+        //---------- Fim transação ---------
+       
+        Thread.sleep(999999);
+	}
+
+	private static void verificarEstadoObjetos(EntityManager em, Categoria categoriaNotebook, Produto produtoNotebook) {
+		if(em.contains(produtoNotebook))
+        	System.out.println("Objeto produtoNotebook está managed.");
+        else
+        	System.out.println("Objeto produtoNotebook está detached.");
+        
+        if(em.contains(categoriaNotebook))
+        	System.out.println("Objeto categoriaNotebook está managed.");
+        else
+        	System.out.println("Objeto categoriaNotebook está detached.");
+        
+        if(em.getTransaction().isActive())
+        	System.out.println("Há transação ativa!");
+        else
+        	System.out.println("Não há transação ativa!");
 	}
 	
 	private static void imprimirProdutos(ProdutoDao produtoDao) {
