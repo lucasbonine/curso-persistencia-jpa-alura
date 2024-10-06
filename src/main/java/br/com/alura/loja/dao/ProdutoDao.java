@@ -18,13 +18,20 @@ public class ProdutoDao {
 		em.persist(produto);
 	}
 	
-	public void atualizar(Produto produto) {
-		em.merge(produto);
+	public Produto atualizar(Produto produto) {
+		return em.merge(produto);
 	}
 	
 	public List<Produto> buscarTodos() {
 		String jpql = "SELECT p FROM Produto p";
 		return em.createQuery(jpql, Produto.class).getResultList();
+	}
+	
+	public void remover(Produto produto) {
+		if(!em.contains(produto))
+			throw new RuntimeException("Produto não está managed para ser removido!");
+
+		this.em.remove(produto);
 	}
 
 }

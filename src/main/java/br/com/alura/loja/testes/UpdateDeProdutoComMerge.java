@@ -12,7 +12,7 @@ import br.com.alura.loja.modelo.Categoria;
 import br.com.alura.loja.modelo.Produto;
 import br.com.alura.loja.util.JPAUtil;
 
-public class AtualizacaoDeProdutoComMerge {
+public class UpdateDeProdutoComMerge {
 
 	public static void main(String[] args) throws SQLException, InterruptedException {
 		/*
@@ -48,13 +48,15 @@ public class AtualizacaoDeProdutoComMerge {
         //---------- Fim transação ---------
         
         verificarEstadoObjetos(em, categoriaNotebook, produtoNotebook);
-        produtoNotebook.setDescricao("descricao alterada");
+        produtoNotebook.setDescricao("descricao alterada 1");
         
         //------ Início transação -----
         em.getTransaction().begin();
-        em.clear();//apaga a alteração realizada enquanto produtoNotebook estava detached
+        em.clear(); //volta tudo para detached
         
-        verificarEstadoObjetos(em, categoriaNotebook, produtoNotebook);
+      //"merge" devolve uma instancia "managed" para um objeto que estava detached
+        Produto produtoAlterado =  produtoDao.atualizar(produtoNotebook); 
+        produtoAlterado.setDescricao("descricao alterada 2");
         
         imprimirProdutos(produtoDao);
 

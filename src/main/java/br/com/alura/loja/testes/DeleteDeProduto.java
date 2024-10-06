@@ -13,10 +13,9 @@ import br.com.alura.loja.modelo.Categoria;
 import br.com.alura.loja.modelo.Produto;
 import br.com.alura.loja.util.JPAUtil;
 
-public class CadastroDeProduto {
+public class DeleteDeProduto {
 
-	public static void main(String[] args) throws SQLException {
-		
+	public static void main(String[] args) throws SQLException, InterruptedException {
 		/*
 		 * Efetivamente inicia o H2 e o hibernate, 
 		 * criando as tabelas defininas nas anotações JPA
@@ -43,25 +42,19 @@ public class CadastroDeProduto {
 		categoriaDao.cadastrar(categoriaCelular); //chama o persist
 		produtoDao.cadastrar(produtoCelular); //chama o persist
 		
-		/*
-		 * após chamado o persist, a entidade torna-se managed e
-		 *  qualquer alteração no objeto vai alterar o seu estado 
-		 *  na base assim que commitado
-		 */
+		em.getTransaction().commit();
 		
-		produtoCelular.setNome("Galaxy S23"); //faz update SQL porém dentro da sessão do hibernate
-		produtoCelular.setDescricao("Celular samsung galaxy s24");
-		
-		//encerra a transação e é necessário abrir outra para realizar alterações no DB
-		em.getTransaction().commit(); 
-		
-		//Trazendo o produto (não é necessário transação)
-		Produto p = em.find(Produto.class, 1L);
-		System.out.println(p.toString());
-		
-		
-		em.close();
+		em.getTransaction().begin();
+		try {
+			produtoDao.remover(produtoCelular);			
+		}catch (RuntimeException e) {
+			em.getTransaction().rollback();
+			e.printStackTrace();
+		}
+		em.getTransaction().commit();
 
+		
+		Thread.sleep(999999);
 	}
 
 }
