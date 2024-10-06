@@ -54,7 +54,7 @@ public class AtualizacaoDeProdutoComMerge {
         
         em.getTransaction().begin();
         
-        em.merge(produtoNotebook); //<<<<----------- atualização do produtoNotebook com "merge"
+        produtoDao.atualizar(produtoNotebook); //<<<<----------- atualização do produtoNotebook com "merge"
         
       //-------------- AQUI ESTÁ EM MODO MANAGED POIS CHAMOU "merge" ----------
         

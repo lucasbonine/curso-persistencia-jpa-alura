@@ -18,6 +18,10 @@ public class ProdutoDao {
 		em.persist(produto);
 	}
 	
+	public void atualizar(Produto produto) {
+		em.merge(produto);
+	}
+	
 	public List<Produto> buscarTodos() {
 		String jpql = "SELECT p FROM Produto p";
 		return em.createQuery(jpql, Produto.class).getResultList();

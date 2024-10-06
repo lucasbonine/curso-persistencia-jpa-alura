@@ -16,6 +16,10 @@ public class CategoriaDao {
 		em.persist(categoria);
 	}
 	
+	public void atualizar(Categoria categoria) {
+		em.merge(categoria);
+	}
+	
 	
 
 }
