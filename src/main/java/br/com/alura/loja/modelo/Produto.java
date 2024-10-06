@@ -28,6 +28,9 @@ public class Produto {
 	private BigDecimal preco;
 	private LocalDate dataCadastro = LocalDate.now();
 	
+	public Produto() {
+		super();
+	}
 	@ManyToOne
 	private Categoria categoria;
 	
@@ -66,6 +69,11 @@ public class Produto {
 	}
 	public void setCategoria(Categoria categoria) {
 		this.categoria = categoria;
+	}
+	@Override
+	public String toString() {
+		return "Produto [id=" + id + ", nome=" + nome + ", descricao=" + descricao + ", preco=" + preco
+				+ ", dataCadastro=" + dataCadastro + ", categoria=" + categoria + "]";
 	}
 
 }
